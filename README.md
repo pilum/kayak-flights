@@ -1,13 +1,13 @@
-# Kayak Flight Scraper and Flight Lookup
+# Kayak Flight Scraper
 
 This project was created for learning purposes in my BSc Data Science for the module: "Acquiring Data from the Web".
 
-The goal was to scrape real flight data from Kayak for any route and date using Selenium for browser automation and BeautifulSoup for parsing. 
-Along the way I also explored reverse engineering Kayak's internal API by analyzing network requests in the browser DevTools.
+The goal was to scrape real flight data from Kayak for any route and date using Selenium for browser automation.
+I also tried reverse engineering Kayak's internal API by analyzing network requests in DevTools, but that turned out to be way harder than expected so I went with scraping instead.
 
 <hr>
 
-Note: Currently this scraper only supports one-way flights on kayak.ch with CHF as currency. Support for kayak.com is being explored via API reverse engineering, as the site uses dynamically generated class names which make HTML scraping unreliable.
+Note: Currently this scraper only supports one-way flights on kayak.com. Two-way flight support is coming soon.
 
 The scraped data can later be used to make interesting analyses such as:
 
@@ -20,14 +20,14 @@ The scraped data can later be used to make interesting analyses such as:
 
 - Python
 - Selenium
-- BeautifulSoup
 
 ## Usage
 
-**Example:**
 ```bash
-uv run main.py ZRH SAW 2026-03-28
+python src/main.py
 ```
 
-> Disclaimer
-This project is for educational purposes only. Scraping Kayak may violate their Terms of Service. Do not use this for commercial purposes.
+You will be prompted to enter a departure date. The scraper will then open a browser, search Kayak and return the flight results.
+
+> Disclaimer:
+> This project is for educational purposes only. Scraping Kayak may violate their Terms of Service. Do not use this for commercial purposes.
