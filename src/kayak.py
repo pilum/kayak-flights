@@ -32,6 +32,7 @@ class KayakScraper():
 
         # scrape the flight
         self.driver.get(self.url)
+        # TODO: Driver Sleep (15)
         time.sleep(15)  # Increased wait time for full page load
         
         # remove unnecessary data like ads from the flights:
