@@ -24,17 +24,36 @@ class KayakScraper():
         self.driver = webdriver.Chrome(options=options)
 
 
-    def search_flight_oneway(self, origin: str="ZRH", destination: str="SAW"):
-        departure_date = input("Please enter the departure date [YYYY-DD-MM]: ")
+    def search_flight_oneway(self, origin: str="ZRH", destination: str="SAW", departure_date: str=None):
+        if departure_date is None:
+            departure_date = input("Please enter the departure date [YYYY-MM-DD]: ")
 
         # construct url for search request
-        self.url = f"https://www.kayak.com/flights/{origin}-{destination}/{departure_date}?sort=bestflight_a/"
+        self.url = f"https://www.kayak.com/flights/{origin}-{destination}/{departure_date}/sort=bestflight_a/?sort=bestflight_a"
 
         # scrape the flight
         self.driver.get(self.url)
         # TODO: Driver Sleep (15)
         time.sleep(15)  # Increased wait time for full page load
-        
+
+        # accept the cookie banner if present
+        try:
+            cookie_btn = self.driver.find_element('xpath', "//div[@class='RxNS-button-content' and normalize-space(text())='Accept all']")
+            cookie_btn.click()
+            time.sleep(2)
+        except Exception:
+            pass
+
+        # scroll to the very bottom so all lazy-loaded flights render
+        last_height = self.driver.execute_script("return document.body.scrollHeight")
+        while True:
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            time.sleep(2)
+            new_height = self.driver.execute_script("return document.body.scrollHeight")
+            if new_height == last_height:
+                break
+            last_height = new_height
+
         # remove unnecessary data like ads from the flights:
         flights = self.driver.find_elements('xpath', "//div[contains(@class, '-result-item-container')]")
         flights_cleaned = []
